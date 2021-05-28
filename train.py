@@ -41,7 +41,7 @@ def main(
         train_set, batch_size=n_spks, shuffle=True, num_workers=8
     )
     valid_loader = InfiniteDataLoader(
-        valid_set, batch_size=n_spks, shuffle=True, num_workers=8
+        valid_set, batch_size=n_spks, shuffle=False, num_workers=8
     )
 
     # construct iterator
