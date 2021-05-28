@@ -2,13 +2,7 @@
 
 This is an unofficial implementation of the paper [One-shot Voice Conversion by Separating Speaker and Content Representations with Instance Normalization](https://arxiv.org/abs/1904.05742) modified from the official one.
 
-## Dependencies
-
-- Python >= 3.6
-- torch >= 1.7.0
-- torchaudio >= 0.7.0
-- numpy >= 1.16.0
-- librosa >= 0.6.3
+Requires at least python 3.6. For other dependencies, see requirements.txt.
 
 ## Differences from the official implementation
 
