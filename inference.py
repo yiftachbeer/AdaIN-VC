@@ -15,8 +15,8 @@ def main(
     output: str,
 ):
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    model = torch.jit.load(model_path).to(device)
-    vocoder = torch.jit.load(vocoder_path).to(device)
+    model = torch.jit.load(model_path, map_location=device)
+    vocoder = torch.jit.load(vocoder_path, map_location=device)
     wav2mel = Wav2Mel()
 
     src, src_sr = torchaudio.load(source)
