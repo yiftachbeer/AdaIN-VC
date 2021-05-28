@@ -49,14 +49,14 @@ You can use `inference.py` to perform one-shot voice conversion.
 The pre-trained model will be available soon.
 
 ```bash
-python inference.py <model_path> <vocoder_path> <source> <target> <output>
+python inference.py <source> <target> <output> [--model_path mp] [--vocoder_path vp]
 ```
 
-- **model_path**: The path of the model file.
-- **vocoder_path**: The path of the vocoder file.
 - **source**: The utterance providing linguistic content.
 - **target**: The utterance providing target speaker timbre.
 - **output**: The converted utterance.
+- **mp**: The path of the model file.
+- **vp**: The path of the vocoder file.
 
 ## Reference
 

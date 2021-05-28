@@ -6,13 +6,16 @@ import torchaudio
 
 from data import Wav2Mel
 
+PRETRAINED_VC_MODEL_PATH = 'pretrained/vc_model.pt'
+PRETRAINED_VOCODER_PATH = 'pretrained/vocoder.pt'
+
 
 def main(
-    model_path: str,
-    vocoder_path: str,
     source: str,
     target: str,
     output: str,
+    model_path: str = PRETRAINED_VC_MODEL_PATH,
+    vocoder_path: str = PRETRAINED_VOCODER_PATH,
 ):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = torch.jit.load(model_path, map_location=device)
@@ -36,9 +39,9 @@ def main(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("model_path", type=str)
-    parser.add_argument("vocoder_path", type=str)
     parser.add_argument("source", type=str)
     parser.add_argument("target", type=str)
     parser.add_argument("output", type=str)
+    parser.add_argument("model_path", type=str)
+    parser.add_argument("vocoder_path", type=str)
     main(**vars(parser.parse_args()))
