@@ -2,9 +2,8 @@ import argparse
 import json
 import os
 from functools import partial
-from uuid import uuid4
+from pathlib import Path
 
-import librosa
 import torch
 import torch.multiprocessing as mp
 import torch.nn as nn
@@ -24,7 +23,8 @@ def process_files(audio_file: str, wav2mel: nn.Module) -> Tensor:
 
 def main(data_dir: str, save_dir: str, segment: int):
     mp.set_sharing_strategy("file_system")
-    os.makedirs(save_dir, exist_ok=True)
+    save_path = Path(save_dir)
+    save_path.mkdir(parents=True, exist_ok=True)
     wav2mel = Wav2Mel()
     file2mel = partial(process_files, wav2mel=wav2mel)
 
@@ -32,18 +32,15 @@ def main(data_dir: str, save_dir: str, segment: int):
     speakers = sorted(os.listdir(data_dir))
 
     for spk in tqdm(speakers):
-        spk_dir = os.path.join(data_dir, spk)
-        wav_files = librosa.util.find_files(spk_dir)
-        mels = [file2mel(wav_file) for wav_file in wav_files]
-        mels = list(filter(lambda x: x is not None and x.shape[-1] > segment, mels))
-        rnd_paths = [f"{uuid4().hex}.pt" for _ in range(len(mels))]
-        dummy = [
-            torch.save(mel, os.path.join(save_dir, path))
-            for (mel, path) in zip(mels, rnd_paths)
-        ]
-        meta_data[spk] = rnd_paths
+        meta_data[spk] = []
+        spk_dir = Path(data_dir) / spk
+        for wav_file in spk_dir.rglob('*mic2.flac'):
+            mel = file2mel(wav_file)
+            if mel is not None and mel.shape[-1] > segment:
+                torch.save(mel, save_path / wav_file.name)
+                meta_data[spk].append(wav_file.name)
 
-    with open(os.path.join(save_dir, "metadata.json"), "w") as f:
+    with open(save_path / 'metadata.json', "w") as f:
         json.dump(meta_data, f, indent=4)
 
 
