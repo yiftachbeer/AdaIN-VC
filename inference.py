@@ -42,6 +42,6 @@ if __name__ == "__main__":
     parser.add_argument("source", type=str)
     parser.add_argument("target", type=str)
     parser.add_argument("output", type=str)
-    parser.add_argument("model_path", type=str)
-    parser.add_argument("vocoder_path", type=str)
+    parser.add_argument("--model_path", type=str, default=PRETRAINED_VC_MODEL_PATH)
+    parser.add_argument("--vocoder_path", type=str, default=PRETRAINED_VOCODER_PATH)
     main(**vars(parser.parse_args()))
