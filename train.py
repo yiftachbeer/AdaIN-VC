@@ -1,6 +1,6 @@
 import argparse
-import os
 from tqdm.auto import trange
+from pathlib import Path
 import wandb
 
 import torch
@@ -35,6 +35,7 @@ def main(
     train_set, valid_set = random_split(
         data, [int(len(data) * 0.8), len(data) - int(len(data) * 0.8)]
     )
+    print(f'Using speakers {valid_set.indices} for validation.')
 
     # construct loader
     train_loader = InfiniteDataLoader(
@@ -48,7 +49,7 @@ def main(
     train_iter = infinite_iterator(train_loader)
     valid_iter = infinite_iterator(valid_loader)
 
-    with wandb.init(config=config) as run:
+    with wandb.init(config=config, ) as run:
         config = wandb.config  # Standard for wandb, make sure we used everything as logged
 
         # Build model
@@ -63,6 +64,9 @@ def main(
             amsgrad=config["Optimizer"]["amsgrad"],
             weight_decay=config["Optimizer"]["weight_decay"],
         )
+
+        save_path = Path(save_dir)
+        save_path.mkdir(exist_ok=True)
 
         criterion = nn.L1Loss()
         pbar = trange(n_steps, ncols=0)
@@ -95,11 +99,11 @@ def main(
 
             # save model and optimizer
             if (step + 1) % save_steps == 0:
-                model_path = os.path.join(save_dir, f"model-{step + 1}.ckpt")
+                model_path = save_path / f'model-{step + 1}.ckpt'
                 model.cpu()
                 model.save(model_path)
                 model.to(device)
-                opt_path = os.path.join(save_dir, f"opt-{step + 1}.ckpt")
+                opt_path = save_path / f'opt-{step + 1}.ckpt'
                 torch.save(opt.state_dict(), opt_path)
 
             if (step + 1) % log_steps == 0:
@@ -114,13 +118,13 @@ def main(
                     loss = criterion(rec_mels, org_mels)
                     valid_loss += loss.item()
                 valid_loss /= valid_steps
-                wandb.log({'validation/rec_loss': valid_loss}, step + 1)
+                wandb.log({'validation_rec_loss': valid_loss}, step + 1)
                 model.train()
 
-                wandb.log({'training/rec_loss': rec_loss,
-                           'training/kl_loss': kl_loss,
-                           'training/grad_norm': grad_norm,
-                           'lambda/kl': kl_lambda},
+                wandb.log({'training_rec_loss': rec_loss,
+                           'training_kl_loss': kl_loss,
+                           'training_grad_norm': grad_norm,
+                           'lambda_kl': kl_lambda},
                           step + 1)
 
             # update tqdm bar
