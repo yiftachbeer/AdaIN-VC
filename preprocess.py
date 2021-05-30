@@ -26,7 +26,8 @@ def main(data_dir: str, save_dir: str, segment: int):
     save_path = Path(save_dir)
     save_path.mkdir(parents=True, exist_ok=True)
     wav2mel = Wav2Mel()
-    file2mel = partial(process_files, wav2mel=wav2mel)
+    # file2mel = partial(process_files, wav2mel=wav2mel)
+    file2mel = partial(process_files, wav2mel=lambda x, y: x)
 
     meta_data = {}
     speakers = sorted(os.listdir(data_dir))
@@ -37,8 +38,8 @@ def main(data_dir: str, save_dir: str, segment: int):
         for wav_file in spk_dir.rglob('*mic2.flac'):
             mel = file2mel(wav_file)
             if mel is not None and mel.shape[-1] > segment:
-                torch.save(mel, save_path / wav_file.name)
-                meta_data[spk].append(wav_file.name)
+                torch.save(mel, save_path / wav_file.with_suffix('.mel'))
+                meta_data[spk].append(wav_file.with_suffix('.mel'))
 
     with open(save_path / 'metadata.json', "w") as f:
         json.dump(meta_data, f, indent=4)
