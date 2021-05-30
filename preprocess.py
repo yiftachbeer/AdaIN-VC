@@ -39,7 +39,7 @@ def main(data_dir: str, save_dir: str, segment: int):
             mel = file2mel(wav_file)
             if mel is not None and mel.shape[-1] > segment:
                 torch.save(mel, save_path / wav_file.with_suffix('.mel'))
-                meta_data[spk].append(wav_file.with_suffix('.mel'))
+                meta_data[spk].append(str(wav_file.with_suffix('.mel')))
 
     with open(save_path / 'metadata.json', "w") as f:
         json.dump(meta_data, f, indent=4)
