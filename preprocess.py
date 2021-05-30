@@ -26,8 +26,7 @@ def main(data_dir: str, save_dir: str, segment: int):
     save_path = Path(save_dir)
     save_path.mkdir(parents=True, exist_ok=True)
     wav2mel = Wav2Mel()
-    # file2mel = partial(process_files, wav2mel=wav2mel)
-    file2mel = partial(process_files, wav2mel=lambda x, y: x)
+    file2mel = partial(process_files, wav2mel=wav2mel)
 
     meta_data = {}
     speakers = sorted(os.listdir(data_dir))
