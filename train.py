@@ -35,7 +35,7 @@ def main(
     train_set, valid_set = random_split(
         data, [int(len(data) * 0.8), len(data) - int(len(data) * 0.8)]
     )
-    print(f'Using speakers {valid_set.indices} for validation.')
+    print(f'Using speakers {[data.id2spk[idx] for idx in valid_set.indices]} for validation.')
 
     # construct loader
     train_loader = InfiniteDataLoader(
