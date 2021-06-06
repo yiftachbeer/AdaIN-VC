@@ -25,16 +25,21 @@ def main(
     src, src_sr = torchaudio.load(source)
     tgt, tgt_sr = torchaudio.load(target)
 
-    src = wav2mel(src, src_sr)[None, :].to(device)
-    tgt = wav2mel(tgt, tgt_sr)[None, :].to(device)
-
-    cvt = model.inference(src, tgt)
-
     with torch.no_grad():
-        wav = vocoder.generate([cvt.squeeze(0).data.T])
+        src = wav2mel(src, src_sr)[None, :].to(device)
+        tgt = wav2mel(tgt, tgt_sr)[None, :].to(device)
+
+    wav = convert_voice(src, tgt, model, vocoder)
 
     wav = wav[0].data.cpu().numpy()
     sf.write(output, wav, wav2mel.sample_rate)
+
+
+def convert_voice(src, tgt, model, vocoder):
+    with torch.no_grad():
+        cvt = model.inference(src, tgt)
+        wav = vocoder.generate([cvt.squeeze(0).data.T])
+    return wav
 
 
 if __name__ == "__main__":
