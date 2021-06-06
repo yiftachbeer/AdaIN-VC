@@ -34,7 +34,7 @@ def main(data_dir: str, save_dir: str, segment: int):
     for spk in tqdm(speakers):
         meta_data[spk] = []
         spk_dir = Path(data_dir) / spk
-        for wav_file in spk_dir.rglob('*mic2.flac'):
+        for wav_file in sorted(spk_dir.rglob('*mic2.flac')):
             mel = file2mel(wav_file)
             if mel is not None and mel.shape[-1] > segment:
                 file_name = wav_file.name + '.mel'
