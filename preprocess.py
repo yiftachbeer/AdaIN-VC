@@ -22,7 +22,7 @@ def process_files(audio_file: str, wav2mel: nn.Module) -> Tensor:
     return mel_tensor
 
 
-def main(data_dir: str, save_dir: str, segment: int):
+def main(data_dir: str, save_dir: str, segment: int = 128):
     mp.set_sharing_strategy("file_system")
     save_path = Path(save_dir)
     save_path.mkdir(parents=True, exist_ok=True)

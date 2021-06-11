@@ -1,6 +1,6 @@
-import argparse
-
 import soundfile as sf
+import fire
+
 import torch
 import torchaudio
 
@@ -8,6 +8,13 @@ from data import Wav2Mel
 
 PRETRAINED_VC_MODEL_PATH = 'pretrained/vc_model.pt'
 PRETRAINED_VOCODER_PATH = 'pretrained/vocoder.pt'
+
+
+def convert_voice(src, tgt, model, vocoder):
+    with torch.no_grad():
+        cvt = model.inference(src, tgt)
+        wav = vocoder.generate([cvt.squeeze(0).data.T])
+    return wav
 
 
 def main(
@@ -35,18 +42,5 @@ def main(
     sf.write(output, wav, wav2mel.sample_rate)
 
 
-def convert_voice(src, tgt, model, vocoder):
-    with torch.no_grad():
-        cvt = model.inference(src, tgt)
-        wav = vocoder.generate([cvt.squeeze(0).data.T])
-    return wav
-
-
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("source", type=str)
-    parser.add_argument("target", type=str)
-    parser.add_argument("output", type=str)
-    parser.add_argument("--model_path", type=str, default=PRETRAINED_VC_MODEL_PATH)
-    parser.add_argument("--vocoder_path", type=str, default=PRETRAINED_VOCODER_PATH)
-    main(**vars(parser.parse_args()))
+    fire.Fire(main)

@@ -1,11 +1,11 @@
-import argparse
 from tqdm.auto import trange
 from pathlib import Path
 import wandb
+import yaml
+import fire
 
 import torch
 import torch.nn as nn
-import yaml
 from torch.utils.data import random_split
 
 from data import InfiniteDataLoader, SpeakerDataset, infinite_iterator
@@ -16,11 +16,11 @@ def main(
     config_file: str,
     data_dir: str,
     save_dir: str,
-    n_steps: int,
-    save_steps: int,
-    log_steps: int,
-    n_spks: int,
-    n_uttrs: int,
+    n_steps: int = int(1e6),
+    save_steps: int = 5000,
+    log_steps: int = 250,
+    n_spks: int = 32,
+    n_uttrs: int = 4,
 ):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.backends.cudnn.benchmark = True
@@ -132,13 +132,4 @@ def main(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("config_file", type=str)
-    parser.add_argument("data_dir", type=str)
-    parser.add_argument("save_dir", type=str)
-    parser.add_argument("--n_steps", type=int, default=int(1e6))
-    parser.add_argument("--save_steps", type=int, default=5000)
-    parser.add_argument("--log_steps", type=int, default=250)
-    parser.add_argument("--n_spks", type=int, default=32)
-    parser.add_argument("--n_uttrs", type=int, default=4)
-    main(**vars(parser.parse_args()))
+    fire.Fire(main)
