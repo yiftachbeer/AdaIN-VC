@@ -22,6 +22,19 @@ def main(
     n_spks: int = 32,
     n_uttrs: int = 4,
 ):
+    """
+    Trains the model.
+
+    Args:
+    config_file: The config file for AdaIN-VC.
+    data_dir: The directory of processed files given by preprocess.py.
+    save_dir: The directory to save the model.
+    n_steps: The number of steps for training.
+    save_steps: To save the model every save steps.
+    log_steps: To record training information every log steps.
+    n_spks: The number of speakers in the batch.
+    n_uttrs: The number of utterances for each speaker in the batch.
+    """
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.backends.cudnn.benchmark = True
 

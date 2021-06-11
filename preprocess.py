@@ -23,6 +23,14 @@ def process_files(audio_file: str, wav2mel: nn.Module) -> Tensor:
 
 
 def main(data_dir: str, save_dir: str, segment: int = 128):
+    """
+    Extracts features from raw audios.
+
+    Args:
+    data_dir: The directory of speakers.
+    save_dir: The directory to save the processed files.
+    segment: The length of segments for training.
+    """
     mp.set_sharing_strategy("file_system")
     save_path = Path(save_dir)
     save_path.mkdir(parents=True, exist_ok=True)

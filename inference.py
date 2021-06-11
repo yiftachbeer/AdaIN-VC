@@ -24,6 +24,16 @@ def main(
     model_path: str = PRETRAINED_VC_MODEL_PATH,
     vocoder_path: str = PRETRAINED_VOCODER_PATH,
 ):
+    """
+    Perform one-shot voice conversion.
+
+    Args:
+    source: The utterance providing linguistic content.
+    target: The utterance providing target speaker timbre.
+    output: The converted utterance.
+    model_path: The path of the model file.
+    vocoder_path: The path of the vocoder file.
+    """
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = torch.jit.load(model_path, map_location=device)
     vocoder = torch.jit.load(vocoder_path, map_location=device)
