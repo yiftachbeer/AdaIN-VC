@@ -18,6 +18,8 @@ model = torch.jit.load(model_path)
 ## Usage
 The main contribution of this repo is organizing instructions for preprocessing, training and inference into a [runnable notebook](https://github.com/yiftachbeer/AdaIN-VC/blob/master/notebooks/demo.ipynb). [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yiftachbeer/AdaIN-VC/blob/master/notebooks/demo.ipynb)
 
+Also, usage instructions are automatically available using `python adain-vc.py --help` thanks to [python-fire](https://github.com/google/python-fire). 
+
 ## Reference
 
 Please cite the paper if you find AdaIN-VC useful.

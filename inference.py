@@ -1,5 +1,4 @@
 import soundfile as sf
-import fire
 
 import torch
 import torchaudio
@@ -50,7 +49,3 @@ def main(
 
     wav = wav[0].data.cpu().numpy()
     sf.write(output, wav, wav2mel.sample_rate)
-
-
-if __name__ == "__main__":
-    fire.Fire(main)

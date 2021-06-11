@@ -3,8 +3,6 @@ import os
 from functools import partial
 from pathlib import Path
 
-import fire
-
 import torch
 import torch.multiprocessing as mp
 import torch.nn as nn
@@ -52,7 +50,3 @@ def main(data_dir: str, save_dir: str, segment: int = 128):
 
     with open(save_path / 'metadata.json', "w") as f:
         json.dump(meta_data, f, indent=4)
-
-
-if __name__ == "__main__":
-    fire.Fire(main)

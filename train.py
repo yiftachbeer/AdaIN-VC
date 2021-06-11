@@ -2,7 +2,6 @@ from tqdm.auto import trange
 from pathlib import Path
 import wandb
 import yaml
-import fire
 
 import torch
 import torch.nn as nn
@@ -142,7 +141,3 @@ def main(
 
             # update tqdm bar
             pbar.set_postfix({"rec_loss": rec_loss.item(), "kl_loss": kl_loss.item()})
-
-
-if __name__ == "__main__":
-    fire.Fire(main)
