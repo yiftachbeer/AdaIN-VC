@@ -1,8 +1,9 @@
-import argparse
 import json
 import os
 from functools import partial
 from pathlib import Path
+
+import fire
 
 import torch
 import torch.multiprocessing as mp
@@ -46,8 +47,4 @@ def main(data_dir: str, save_dir: str, segment: int):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("data_dir", type=str)
-    parser.add_argument("save_dir", type=str)
-    parser.add_argument("--segment", type=int, default=128)
-    main(**vars(parser.parse_args()))
+    fire.Fire(main)

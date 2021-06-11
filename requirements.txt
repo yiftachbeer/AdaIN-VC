@@ -4,3 +4,4 @@ numpy>=1.16.0
 librosa>=0.6.3
 PyYAML>=5.1
 wandb>=0.10.30
+fire>=0.4.0
