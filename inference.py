@@ -11,7 +11,7 @@ PRETRAINED_VOCODER_PATH = 'pretrained/vocoder.pt'
 
 def convert_voice(src, tgt, model, vocoder):
     with torch.no_grad():
-        cvt = model.inference(src, tgt)
+        cvt, _, _ = model.convert(src, tgt)
         wav = vocoder.generate([cvt.squeeze(0).data.T])
     return wav
 

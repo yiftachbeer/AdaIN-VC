@@ -338,9 +338,7 @@ class AdaINVC(nn.Module):
         self.content_encoder = ContentEncoder(**config["ContentEncoder"])
         self.decoder = Decoder(**config["Decoder"])
 
-    def forward(
-        self, src: Tensor, tgt: Optional[Tensor] = None
-    ) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
+    def forward(self, src: Tensor, tgt: Optional[Tensor] = None) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
         if tgt is None:
             emb = self.speaker_encoder(src)
         else:
@@ -351,8 +349,8 @@ class AdaINVC(nn.Module):
         return mu, log_sigma, emb, dec
 
     @torch.jit.export
-    def inference(self, src: Tensor, tgt: Tensor) -> Tensor:
+    def convert(self, src: Tensor, tgt: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
         emb = self.speaker_encoder(tgt)
         mu, _ = self.content_encoder(src)
         dec = self.decoder(mu, emb)
-        return dec
+        return dec, mu, emb
