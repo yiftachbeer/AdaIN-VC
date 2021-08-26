@@ -141,3 +141,7 @@ def main(
 
             # update tqdm bar
             pbar.set_postfix({"rec_loss": rec_loss.item(), "kl_loss": kl_loss.item()})
+
+    model_path = save_path / f'adain_vc.pt'
+    model.cpu()
+    model.save(model_path)
